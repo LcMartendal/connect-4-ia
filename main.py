@@ -1,36 +1,49 @@
 """Ponto de entrada executável do Lig 4."""
 
-import random
-
+from agentes import AgenteAleatorio, AgenteHumano, AgenteMinimax
 from connect import Connect
+
+
+def ler_opcao(mensagem, opcoes):
+    """Lê do teclado até o usuário digitar uma das opções permitidas."""
+    while True:
+        entrada = input(mensagem).strip()
+        if entrada in opcoes:
+            return entrada
+        print(f"Opção inválida. Escolha entre: {', '.join(opcoes)}.")
+
 
 def main():
     jogo = Connect()
 
-    def agente_humano(tabuleiro, jogador):
-        while True:
-            entrada = input(
-                f"Sua vez ({jogo.SIMBOLOS[jogador]}). "
-                f"Escolha uma coluna (1-{jogo.COLUNAS}): "
-            ).strip()
-            try:
-                coluna = int(entrada) - 1
-            except ValueError:
-                print("Digite um número de coluna entre 1 e 7.")
-                continue
-
-            if coluna not in jogo.acoes(tabuleiro):
-                print("Essa coluna é inválida ou está cheia. Tente outra.")
-                continue
-            return coluna
-
-    def agente_aleatorio(tabuleiro, jogador):
-        return random.choice(jogo.acoes(tabuleiro))
-
     print("=== LIG 4 ===")
-    print("Você joga com X e começa. O computador joga com O.")
-    
-    jogo.run(agente_humano, agente_aleatorio)
+    print("1 - Humano (X) x IA Alfa-Beta (O)")
+    print("2 - IA Alfa-Beta (X) x Humano (O)")
+    print("3 - IA Alfa-Beta (X) x IA Alfa-Beta (O)")
+    print("4 - IA Alfa-Beta (X) x Aleatório (O)")
+    modo = ler_opcao("Escolha o modo: ", ["1", "2", "3", "4"])
+
+    # Profundidade da busca: quanto maior, mais forte e mais lenta a IA.
+    print("\nDificuldade: 1 - Fácil (prof. 2)  2 - Médio (prof. 4)  3 - Difícil (prof. 6)")
+    dificuldade = ler_opcao("Escolha a dificuldade: ", ["1", "2", "3"])
+    profundidade = {"1": 2, "2": 4, "3": 6}[dificuldade]
+
+    humano = AgenteHumano(jogo)
+    ia = AgenteMinimax(jogo, profundidade=profundidade, poda=True, verbose=True)
+
+    # Monta os agentes de MAX (X, começa) e MIN (O) conforme o modo escolhido.
+    if modo == "1":
+        agente_x, agente_o = humano, ia
+    elif modo == "2":
+        agente_x, agente_o = ia, humano
+    elif modo == "3":
+        # Instâncias separadas para cada IA ter seu próprio contador de estados.
+        agente_x = ia
+        agente_o = AgenteMinimax(jogo, profundidade=profundidade, poda=True, verbose=True)
+    else:
+        agente_x, agente_o = ia, AgenteAleatorio(jogo)
+
+    jogo.run(agente_x, agente_o)
 
 
 if __name__ == "__main__":

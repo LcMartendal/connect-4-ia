@@ -90,7 +90,7 @@ class Connect:
             coluna = agentes[jogador](self.tabuleiro, jogador)
             self.tabuleiro = self.resultado(self.tabuleiro, coluna, jogador)
             if mostrar:
-                print(f"Rodada {rodada}: Agente {jogador} ({self.SIMBOLOS[jogador]}) jogou na coluna {coluna}")
+                print(f"Rodada {rodada}: Agente {jogador} ({self.SIMBOLOS[jogador]}) jogou na coluna {coluna + 1}")
                 self.imprimir_tabuleiro()
             self.jogador_atual = self.outro_jogador(jogador)
             rodada += 1
