@@ -14,13 +14,19 @@
 python main.py
 ```
 
+Ao iniciar, escolha um dos modos:
+
+1. Humano (X) x Humano (O)
+2. Humano (X) x Agente (O)
+3. Agente (X) x Agente (O)
+
 ## Parte 1: Definição e formulação do jogo
 
 **Jogo escolhido:** Lig 4. O tabuleiro tem 6 linhas e 7 colunas. Na sua vez, o jogador solta uma peça em uma coluna e ela cai até a posição livre mais baixa. Vence quem alinhar 4 peças na horizontal, na vertical ou na diagonal.
 
 **Estado inicial:** o jogo começa com o tabuleiro vazio. Ele é representado por uma matriz 6x7, onde `0` = vazio, `1` = peça de MAX e `2` = peça de MIN.
 
-**Jogadores:** 2 jogadores. MAX é o humano (`X`), que começa. MIN é o computador (`O`).
+**Jogadores:** dois participantes, que podem ser humanos ou agentes. MAX (`X`) começa e MIN (`O`) joga em seguida.
 
 **Ações possíveis:** escolher uma coluna de 1 a 7. Não é possível jogar em uma coluna cheia.
 
