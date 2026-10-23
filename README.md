@@ -14,6 +14,27 @@
 python main.py
 ```
 
+Para rodar os experimentos (Minimax x Alfa-Beta e IA x aleatório):
+
+```bash
+python comparar.py
+```
+
+## Estrutura do código
+
+Cada módulo corresponde a um conceito da formulação do jogo. A ordem abaixo é uma boa ordem de leitura:
+
+| Módulo | O que faz |
+|---|---|
+| `tabuleiro.py` | Representação do estado (matriz 6x7), estado inicial, ações válidas e função de transição (`jogar`). |
+| `regras.py` | Teste de estado terminal (`fim_de_jogo`), verificação de vitória e função de utilidade (+1000 / −1000 / 0). |
+| `heuristica.py` | Função de avaliação usada quando a busca chega no limite de profundidade. |
+| `busca.py` | Os algoritmos: `minimax` (puro) e `alfa_beta` (com poda), escritos separados para comparação. |
+| `agentes.py` | Quem joga: humano, aleatório e IA (que chama a busca). |
+| `partida.py` | Loop da partida: alterna os agentes até o fim do jogo. |
+| `main.py` | Menu de modo e dificuldade. |
+| `comparar.py` | Experimentos para a reflexão sobre o algoritmo. |
+
 ## Parte 1: Definição e formulação do jogo
 
 **Jogo escolhido:** Lig 4. O tabuleiro tem 6 linhas e 7 colunas. Na sua vez, o jogador solta uma peça em uma coluna e ela cai até a posição livre mais baixa. Vence quem alinhar 4 peças na horizontal, na vertical ou na diagonal.

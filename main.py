@@ -1,7 +1,10 @@
-"""Ponto de entrada executável do Lig 4."""
+"""Ponto de entrada do Lig 4: mostra o menu e inicia a partida.
+
+Uso: python main.py
+"""
 
 from agentes import AgenteAleatorio, AgenteHumano, AgenteMinimax
-from connect import Connect
+from partida import jogar_partida
 
 
 def ler_opcao(mensagem, opcoes):
@@ -14,8 +17,6 @@ def ler_opcao(mensagem, opcoes):
 
 
 def main():
-    jogo = Connect()
-
     print("=== LIG 4 ===")
     print("1 - Humano (X) x IA Alfa-Beta (O)")
     print("2 - IA Alfa-Beta (X) x Humano (O)")
@@ -28,22 +29,24 @@ def main():
     dificuldade = ler_opcao("Escolha a dificuldade: ", ["1", "2", "3"])
     profundidade = {"1": 2, "2": 4, "3": 6}[dificuldade]
 
-    humano = AgenteHumano(jogo)
-    ia = AgenteMinimax(jogo, profundidade=profundidade, poda=True, verbose=True)
+    def nova_ia():
+        return AgenteMinimax(profundidade=profundidade, usar_poda=True, verbose=True)
 
-    # Monta os agentes de MAX (X, começa) e MIN (O) conforme o modo escolhido.
+    # Monta quem joga de MAX (X, começa) e quem joga de MIN (O).
     if modo == "1":
-        agente_x, agente_o = humano, ia
+        agente_max = AgenteHumano()
+        agente_min = nova_ia()
     elif modo == "2":
-        agente_x, agente_o = ia, humano
+        agente_max = nova_ia()
+        agente_min = AgenteHumano()
     elif modo == "3":
-        # Instâncias separadas para cada IA ter seu próprio contador de estados.
-        agente_x = ia
-        agente_o = AgenteMinimax(jogo, profundidade=profundidade, poda=True, verbose=True)
+        agente_max = nova_ia()
+        agente_min = nova_ia()
     else:
-        agente_x, agente_o = ia, AgenteAleatorio(jogo)
+        agente_max = nova_ia()
+        agente_min = AgenteAleatorio()
 
-    jogo.run(agente_x, agente_o)
+    jogar_partida(agente_max, agente_min)
 
 
 if __name__ == "__main__":
