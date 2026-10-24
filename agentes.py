@@ -1,13 +1,5 @@
-"""Agentes que jogam o Lig 4.
-
-Todo agente tem um método escolher_jogada(tabuleiro, jogador) que devolve
-o índice da coluna escolhida (0 a 6). É isso que partida.py espera.
-
-Existem três agentes:
-- AgenteHumano:    pergunta a jogada pelo teclado.
-- AgenteAleatorio: escolhe uma coluna válida ao acaso (adversário de referência).
-- AgenteMinimax:   usa a busca de busca.py (Minimax puro ou com poda Alfa-Beta).
-"""
+# Agentes do Lig 4. Todos implementam escolher_jogada(tabuleiro, jogador),
+# que devolve a coluna escolhida (0 a 6).
 
 import random
 import time
@@ -16,9 +8,8 @@ from busca import Contador, escolher_melhor_coluna
 from tabuleiro import COLUNAS, SIMBOLOS, colunas_validas
 
 
+# Lê a jogada do teclado.
 class AgenteHumano:
-    """Pede a jogada pelo teclado e só aceita colunas válidas."""
-
     def escolher_jogada(self, tabuleiro, jogador):
         while True:
             entrada = input(
@@ -26,7 +17,7 @@ class AgenteHumano:
             ).strip()
 
             try:
-                coluna = int(entrada) - 1  # o usuário digita 1-7, internamente usamos 0-6
+                coluna = int(entrada) - 1  # usuário digita de 1 a 7
             except ValueError:
                 print(f"Digite um número de coluna entre 1 e {COLUNAS}.")
                 continue
@@ -38,24 +29,18 @@ class AgenteHumano:
             return coluna
 
 
+# Joga em qualquer coluna válida.
 class AgenteAleatorio:
-    """Escolhe qualquer coluna válida ao acaso."""
-
     def escolher_jogada(self, tabuleiro, jogador):
         return random.choice(colunas_validas(tabuleiro))
 
 
+# Minimax com profundidade limitada; usar_poda liga o Alfa-Beta.
 class AgenteMinimax:
-    """Agente de busca competitiva com profundidade limitada.
-
-    - usar_poda=True  -> Minimax com poda Alfa-Beta (algoritmo escolhido pelo grupo).
-    - usar_poda=False -> Minimax puro (usado só para comparar o custo).
-    """
-
     def __init__(self, profundidade=4, usar_poda=True, verbose=False):
         self.profundidade = profundidade
         self.usar_poda = usar_poda
-        self.verbose = verbose  # se True, mostra estatísticas a cada jogada
+        self.verbose = verbose  # imprime estatísticas a cada jogada
         self.estados_ultima_jogada = 0
         self.estados_partida = 0
 

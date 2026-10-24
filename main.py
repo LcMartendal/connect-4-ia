@@ -1,14 +1,65 @@
-"""Ponto de entrada do Lig 4: mostra o menu e inicia a partida.
-
-Uso: python main.py
 """
+# Lig 4 (Connect 4)
+
+## Participantes
+
+- Cauã Fernando Bertolini
+- Eduarda Dagnoni Mazureck
+- Fabian Formento
+- Lucas Visconti
+- Luiz Carlos Martendal
+
+## Como executar
+
+```bash
+python main.py
+```
+
+No menu é possível escolher o modo de jogo (humano x IA, IA x humano, IA x IA ou IA x aleatório) e a dificuldade (profundidade 2, 4 ou 6 da busca).
+
+## Estrutura do código
+
+Cada módulo corresponde a um conceito da formulação do jogo. A ordem abaixo é uma boa ordem de leitura:
+
+| Módulo | O que faz |
+|---|---|
+| `tabuleiro.py` | Representação do estado (matriz 6x7), estado inicial, ações válidas e função de transição (`jogar`). |
+| `regras.py` | Teste de estado terminal (`fim_de_jogo`), verificação de vitória e função de utilidade (+1000 / −1000 / 0). |
+| `heuristica.py` | Função de avaliação usada quando a busca chega no limite de profundidade. |
+| `busca.py` | Os algoritmos: `minimax` (puro) e `alfa_beta` (com poda). A IA usa o Alfa-Beta. |
+| `agentes.py` | Quem joga: humano, aleatório e IA (que chama a busca). |
+| `partida.py` | Loop da partida: alterna os agentes até o fim do jogo. |
+| `main.py` | Menu de modo e dificuldade. |
+
+## Parte 1: Definição e formulação do jogo
+
+**Jogo escolhido:** Lig 4. O tabuleiro tem 6 linhas e 7 colunas. Na sua vez, o jogador solta uma peça em uma coluna e ela cai até a posição livre mais baixa. Vence quem alinhar 4 peças na horizontal, na vertical ou na diagonal.
+
+**Estado inicial:** o jogo começa com o tabuleiro vazio. Ele é representado por uma matriz 6x7, onde `0` = vazio, `1` = peça de MAX e `2` = peça de MIN.
+
+**Jogadores:** 2 jogadores. MAX joga com `X` e começa; MIN joga com `O`. No modo padrão, MAX é o humano e MIN é o computador.
+
+**Ações possíveis:** escolher uma coluna de 1 a 7. Não é possível jogar em uma coluna cheia.
+
+**Função de transição:** a peça vai para a linha vazia mais baixa da coluna escolhida, e a vez passa para o outro jogador.
+
+**Estado terminal:** o jogo termina quando um jogador alinha 4 peças (vitória dele, derrota do outro) ou quando o tabuleiro enche sem vencedor (empate).
+
+**Função de utilidade:** vitória de MAX = +1000, vitória de MIN = −1000, empate = 0.
+
+**Tipo de jogo:** determinístico, porque não existe sorte. A mesma jogada sempre gera o mesmo resultado.
+"""
+
+
+# Menu do Lig 4.
+# Uso: python main.py
 
 from agentes import AgenteAleatorio, AgenteHumano, AgenteMinimax
 from partida import jogar_partida
 
 
+# Repete a pergunta até receber uma opção válida.
 def ler_opcao(mensagem, opcoes):
-    """Lê do teclado até o usuário digitar uma das opções permitidas."""
     while True:
         entrada = input(mensagem).strip()
         if entrada in opcoes:
@@ -24,7 +75,6 @@ def main():
     print("4 - IA Alfa-Beta (X) x Aleatório (O)")
     modo = ler_opcao("Escolha o modo: ", ["1", "2", "3", "4"])
 
-    # Profundidade da busca: quanto maior, mais forte e mais lenta a IA.
     print("\nDificuldade: 1 - Fácil (prof. 2)  2 - Médio (prof. 4)  3 - Difícil (prof. 6)")
     dificuldade = ler_opcao("Escolha a dificuldade: ", ["1", "2", "3"])
     profundidade = {"1": 2, "2": 4, "3": 6}[dificuldade]
@@ -32,7 +82,7 @@ def main():
     def nova_ia():
         return AgenteMinimax(profundidade=profundidade, usar_poda=True, verbose=True)
 
-    # Monta quem joga de MAX (X, começa) e quem joga de MIN (O).
+    # MAX joga com X e começa
     if modo == "1":
         agente_max = AgenteHumano()
         agente_min = nova_ia()

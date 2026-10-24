@@ -14,11 +14,7 @@
 python main.py
 ```
 
-Para rodar os experimentos (Minimax x Alfa-Beta e IA x aleatório):
-
-```bash
-python comparar.py
-```
+No menu é possível escolher o modo de jogo (humano x IA, IA x humano, IA x IA ou IA x aleatório) e a dificuldade (profundidade 2, 4 ou 6 da busca).
 
 ## Estrutura do código
 
@@ -29,11 +25,10 @@ Cada módulo corresponde a um conceito da formulação do jogo. A ordem abaixo �
 | `tabuleiro.py` | Representação do estado (matriz 6x7), estado inicial, ações válidas e função de transição (`jogar`). |
 | `regras.py` | Teste de estado terminal (`fim_de_jogo`), verificação de vitória e função de utilidade (+1000 / −1000 / 0). |
 | `heuristica.py` | Função de avaliação usada quando a busca chega no limite de profundidade. |
-| `busca.py` | Os algoritmos: `minimax` (puro) e `alfa_beta` (com poda), escritos separados para comparação. |
+| `busca.py` | Os algoritmos: `minimax` (puro) e `alfa_beta` (com poda). A IA usa o Alfa-Beta. |
 | `agentes.py` | Quem joga: humano, aleatório e IA (que chama a busca). |
 | `partida.py` | Loop da partida: alterna os agentes até o fim do jogo. |
 | `main.py` | Menu de modo e dificuldade. |
-| `comparar.py` | Experimentos para a reflexão sobre o algoritmo. |
 
 ## Parte 1: Definição e formulação do jogo
 
@@ -41,7 +36,7 @@ Cada módulo corresponde a um conceito da formulação do jogo. A ordem abaixo �
 
 **Estado inicial:** o jogo começa com o tabuleiro vazio. Ele é representado por uma matriz 6x7, onde `0` = vazio, `1` = peça de MAX e `2` = peça de MIN.
 
-**Jogadores:** 2 jogadores. MAX é o humano (`X`), que começa. MIN é o computador (`O`).
+**Jogadores:** 2 jogadores. MAX joga com `X` e começa; MIN joga com `O`. No modo padrão, MAX é o humano e MIN é o computador.
 
 **Ações possíveis:** escolher uma coluna de 1 a 7. Não é possível jogar em uma coluna cheia.
 
@@ -51,4 +46,4 @@ Cada módulo corresponde a um conceito da formulação do jogo. A ordem abaixo �
 
 **Função de utilidade:** vitória de MAX = +1000, vitória de MIN = −1000, empate = 0.
 
-**Tipo de jogo:** determinístico, porque não existe sorte. A mesma jogada sempre gera o mesmo resultado.
+**Tipo de jogo:** determinístico, porque não existe sorte. A mesma jogada sempre gera o mesmo resultado.

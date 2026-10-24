@@ -1,8 +1,4 @@
-"""Loop de uma partida: alterna os agentes até o jogo acabar.
-
-Este é o "motor" do jogo. Ele não sabe quem são os agentes (humano, aleatório
-ou IA); só pede a cada um a sua jogada e aplica as regras.
-"""
+# Loop da partida: pede a jogada de cada agente e aplica no tabuleiro.
 
 from regras import fim_de_jogo, utilidade
 from tabuleiro import (
@@ -16,16 +12,13 @@ from tabuleiro import (
 )
 
 
+# Joga uma partida e devolve o vencedor (MAX, MIN ou None).
+# agente_max joga com X e começa; com mostrar=False nada é impresso.
 def jogar_partida(agente_max, agente_min, mostrar=True):
-    """Executa uma partida completa e devolve o vencedor (MAX, MIN ou None).
-
-    agente_max joga com X e começa; agente_min joga com O.
-    mostrar=False deixa a partida silenciosa (útil para experimentos).
-    """
     agentes = {MAX: agente_max, MIN: agente_min}
 
     tabuleiro = criar_tabuleiro()
-    jogador = MAX  # MAX sempre começa
+    jogador = MAX
     rodada = 1
 
     if mostrar:
@@ -43,7 +36,6 @@ def jogar_partida(agente_max, agente_min, mostrar=True):
         jogador = outro_jogador(jogador)
         rodada += 1
 
-    # O jogo acabou: a utilidade diz quem venceu.
     valor = utilidade(tabuleiro)
     if valor > 0:
         vencedor = MAX
